@@ -1,0 +1,53 @@
+schema_version: 1
+
+context:
+  name: rootutils
+  version: "1.0.7"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/r/rootutils/rootutils-${{ version }}.tar.gz
+  sha256: 7e2444cdbf4a73a907875fb109d55a38b4ee21313cef305bf59fadbf540440bc
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools
+  run:
+    - python >=${{ python_min }}
+    - python-dotenv
+
+tests:
+  - python:
+      imports:
+        - rootutils
+      pip_check: true
+      python_version: ${{ python_min }}.*
+  - script:
+      - python run_test.py
+    files:
+      recipe:
+        - run_test.py
+    requirements:
+      run:
+        - python ${{ python_min }}.*
+
+about:
+  homepage: https://github.com/ashleve/rootutils
+  repository: https://github.com/ashleve/rootutils
+  summary: A simple Python package to solve Python path, work dir, file path, module import, and environment variable setup
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta
